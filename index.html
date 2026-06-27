@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConfigTech | Crée ton PC de rêve</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- RESET & VARIABLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --bg-dark: #0f111a;
+            --bg-card: #161925;
+            --primary-gradient: linear-gradient(135deg, #8a2be2, #4a00e0);
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --accent-red: #ff4a4a;
+            --accent-yellow: #ffb703;
+            --border-color: #23283d;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- ÉCRAN D'ACCUEIL (HERO) --- */
+        .hero-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #1e1b4b 0%, var(--bg-dark) 70%);
+            padding: 40px 20px;
+        }
+
+        .hero-content {
+            max-width: 750px;
+            animation: fadeIn 1s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-badge {
+            background: rgba(138, 43, 226, 0.15);
+            color: #c084fc;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #a855f7, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        /* --- BOUTONS --- */
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 16px 36px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(138, 43, 226, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(138, 43, 226, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        /* --- INTERFACE CONFIGURATEUR --- */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .config-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 40px;
+        }
+
+        @media (max-width: 1024px) {
+            .config-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sticky-sidebar {
+                position: relative !important;
+                top: auto !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .header-buttons button {
+                width: 100%;
+            }
+        }
+
+        /* --- COMPOSANTS & FORMULAIRES --- */
+        .components-section h2 {
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+        }
+
+        .component-group {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+        }
+
+        .component-label-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .component-group label {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .compatibility-warning {
+            font-size: 0.75rem;
+            color: var(--accent-yellow);
+            font-weight: 600;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .compatibility-error {
+            color: var(--accent-red);
+        }
+
+        .source-link {
+            font-size: 0.8rem;
+            color: #a855f7;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+
+        .source-link:hover {
+            color: #6366f1;
+            text-decoration: underline;
+        }
+
+        .component-group select {
+            background: var(--bg-dark);
+            color: white;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            cursor: pointer;
+            transition: border 0.2s;
+        }
+
+        .component-group select:focus {
+            border-color: #8a2be2;
+        }
+
+        .component-group select:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* --- PANNEAU DU BUDGET / RESUME --- */
+        .summary-sidebar h2 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+        }
+
+        .sticky-sidebar {
+            position: sticky;
+            top: 30px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 16px;
+        }
+
+        .budget-container {
+            margin-bottom: 30px;
+        }
+
+        .budget-container label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .budget-container input {
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 12px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            width: 100%;
+            font-weight: 600;
+        }
+
+        .budget-container input:focus {
+            border-color: #8a2be2;
+        }
+
+        .budget-container input:invalid {
+            border-color: var(--accent-red);
+        }
+
+        .currency {
+            position: absolute;
+            right: 15px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .total-container {
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .total-container h3 {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .total-display {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-top: 5px;
+            transition: color 0.3s;
+        }
+
+        .budget-status {
+            font-size: 0.85rem;
+            margin-top: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: rgba(168, 85, 247, 0.1);
+        }
+
+        .budget-status.over {
+            background: rgba(255, 74, 74, 0.1);
+            color: var(--accent-red);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+
+        .button-group button {
+            width: 100%;
+        }
+
+        .btn-small {
+            padding: 12px 16px;
+            font-size: 0.9rem;
+        }
+
+        /* --- SECTION CONTACT & ICÔNES NÉON --- */
+        .contact-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .home-contact {
+            margin-top: 60px;
+            max-width: 100%;
+        }
+
+        .contact-section h2 {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .contact-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            padding: 25px 20px;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .contact-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(138, 43, 226, 0.1);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-icon {
+            font-size: 1.6rem;
+            color: #c084fc;
+            transition: color 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            border-color: #8a2be2;
+            box-shadow: 0 10px 20px rgba(138, 43, 226, 0.15);
+        }
+
+        .contact-card:hover .contact-icon-wrapper {
+            background: var(--primary-gradient);
+            border-color: transparent;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
+        }
+
+        .contact-card:hover .contact-icon {
+            color: white;
+        }
+
+        .contact-card strong {
+            color: #a855f7;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-card span {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            word-break: break-all;
+            text-align: center;
+        }
+
+        /* --- MODALE DE FIN --- */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease-out;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close-button {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 2rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s;
+            border: none;
+            background: none;
+        }
+
+        .close-button:hover {
+            color: white;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .summary-item-row {
+            padding: 12px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .component-link {
+            color: #a855f7;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            flex-grow: 1;
+            margin-left: 5px;
+        }
+
+        .component-link:hover {
+            color: #6366f1;
+            text-decoration: underline;
+        }
+
+        .component-price {
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .summary-total-row {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 2px solid var(--border-color);
+            text-align: right;
+        }
+
+        .warning-incomplete {
+            color: var(--accent-yellow);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        /* --- TOAST NOTIFICATIONS --- */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 8px;
+            z-index: 2000;
+            animation: slideIn 0.3s ease-out;
+            max-width: 300px;
+        }
+
+        .toast.success {
+            border-color: #10b981;
+        }
+
+        .toast.error {
+            border-color: var(--accent-red);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="home-screen" class="hero-container">
+        <div class="hero-content">
+            <span class="hero-badge">Configurateur Intelligent Anti-Bottleneck</span>
+            <h1>Crée la configuration de tes <span class="gradient-text">rêves</span></h1>
+            <p>Choisis tes composants, vérifie les compatibilités et évite le bridage CPU/GPU en temps réel.</p>
+            <button class="btn-primary" onclick="startConfigurator()">Commence ta config de rêve</button>
+
+            <div class="contact-section home-contact">
+                <h2>Besoin d'aide ? Me contacter</h2>
+                <div class="contact-cards">
+                    <div class="contact-card">
+                        <div class="contact-icon-wrapper">
+                            <i class="fa-brands fa-discord contact-icon"></i>
+                        </div>
+                        <strong>Discord</strong>
+                        <span>ax2mm2</span>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon-wrapper">
+                            <i class="fa-solid fa-phone contact-icon"></i>
+                        </div>
+                        <strong>Téléphone</strong>
+                        <span>+33 7 67 69 38 91</span>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon-wrapper">
+                            <i class="fa-solid fa-at contact-icon"></i>
+                        </div>
+                        <strong>Email</strong>
+                        <span>axelmoulin24@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="config-screen" class="main-container hidden">
+        <header class="config-header">
+            <div class="logo">Config<span class="gradient-text">Tech</span></div>
+            <div class="header-buttons">
+                <button class="btn-secondary btn-small" onclick="shareConfiguration()">
+                    <i class="fa-solid fa-share"></i> Partager
+                </button>
+                <button class="btn-secondary btn-small" onclick="resetConfiguration()">
+                    <i class="fa-solid fa-arrows-rotate"></i> Réinitialiser
+                </button>
+                <button class="btn-secondary btn-small" onclick="showHome()">← Retour</button>
+            </div>
+        </header>
+
+        <main class="config-grid">
+            <section class="components-section">
+                <h2>Sélectionne tes composants</h2>
+                <div id="components-container"></div>
+            </section>
+
+            <section class="summary-sidebar">
+                <div class="sticky-sidebar">
+                    <h2>Mon Budget</h2>
+                    <div class="budget-container">
+                        <label for="max-budget">Budget maximum :</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="max-budget" value="1500" min="100" max="10000" step="50" oninput="updateTotal()">
+                            <span class="currency">€</span>
+                        </div>
+                    </div>
+
+                    <div id="budget-status" class="budget-status" style="display: none;"></div>
+
+                    <div class="total-container">
+                        <h3>Prix Cumulé</h3>
+                        <p class="total-display"><span id="total-price">0</span> <span class="euro-symbol">€</span></p>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-primary" onclick="generateSummary()">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Générer ma config
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="summary-modal" class="modal hidden">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal()">&times;</button>
+            <h2>Félicitations ! Voici ta config :</h2>
+            <div id="summary-results"></div>
+            <div class="modal-buttons">
+                <button class="btn-secondary" onclick="closeModal()">Fermer</button>
+                <button class="btn-primary" onclick="copyConfigToClipboard()">
+                    <i class="fa-solid fa-copy"></i> Copier
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dataset = {
+            cpu: [
+                // --- RYZEN 3 (Prix marché de l'occasion ou fin de stock neuf) ---
+                { name: "AMD Ryzen 3 3200G", price: 49, socket: "amd", watts: 65, tier: 1 },
+                { name: "Intel Core i3-10100F", price: 52, socket: "intel", watts: 65, tier: 1 },
+                { name: "AMD Ryzen 3 4100", price: 54, socket: "amd", watts: 65, tier: 1 },
+                { name: "AMD Ryzen 3 3100", price: 58, socket: "amd", watts: 65, tier: 1 },
+                { name: "AMD Ryzen 3 4300G", price: 68, socket: "amd", watts: 65, tier: 1 },
+                
+                // --- RYZEN 5 / ESSENTIELS GAMING ---
+                { name: "AMD Ryzen 5 4500", price: 62, socket: "amd", watts: 65, tier: 1 },
+                { name: "AMD Ryzen 5 3600", price: 71, socket: "amd", watts: 65, tier: 1 },
+                { name: "Intel Core i5-10400F", price: 76, socket: "intel", watts: 65, tier: 1 },
+                { name: "AMD Ryzen 5 5500", price: 82, socket: "amd", watts: 65, tier: 1 },
+                { name: "AMD Ryzen 5 5600X", price: 108, socket: "amd", watts: 65, tier: 2 },
+                { name: "Intel Core i5-13400F", price: 145, socket: "intel", watts: 148, tier: 2 }, 
+                { name: "AMD Ryzen 5 7600X", price: 168, socket: "amd", watts: 105, tier: 2 }, 
+                { name: "AMD Ryzen 5 9600X", price: 206, socket: "amd", watts: 65, tier: 2 }, 
+
+                // --- RYZEN 7 & INTEL MILIEU / HAUT DE GAMME ---
+                { name: "AMD Ryzen 7 3700X", price: 112, socket: "amd", watts: 65, tier: 2 },
+                { name: "AMD Ryzen 7 5700X", price: 134, socket: "amd", watts: 65, tier: 2 },
+                { name: "AMD Ryzen 9 3900X", price: 179, socket: "amd", watts: 105, tier: 2 },
+                { name: "AMD Ryzen 7 5800X3D", price: 239, socket: "amd", watts: 105, tier: 2 }, 
+                { name: "AMD Ryzen 9 5900X", price: 233, socket: "amd", watts: 105, tier: 2 },
+                { name: "Intel Core i5-14600K", price: 252, socket: "intel", watts: 181, tier: 2 }, 
+                { name: "AMD Ryzen 7 7700X", price: 257, socket: "amd", watts: 105, tier: 2 },
+                { name: "Intel Core i7-13700K", price: 297, socket: "intel", watts: 253, tier: 3 }, 
+                { name: "AMD Ryzen 9 5950X", price: 302, socket: "amd", watts: 105, tier: 2 },
+                { name: "AMD Ryzen 7 9700X", price: 305, socket: "amd", watts: 65, tier: 3 }, 
+                { name: "Intel Core i9-12900K", price: 315, socket: "intel", watts: 241, tier: 3 }, 
+                { name: "AMD Ryzen 7 7800X3D", price: 333, socket: "amd", watts: 120, tier: 3 },
+                { name: "AMD Ryzen 9 7900X", price: 338, socket: "amd", watts: 170, tier: 3 }, 
+                { name: "Intel Core i7-14700K", price: 347, socket: "intel", watts: 253, tier: 3 }, 
+                
+                // --- RYZEN 9 & INTEL ENTHOUSIASTE ---
+                { name: "AMD Ryzen 9 9900X", price: 378, socket: "amd", watts: 120, tier: 3 },
+                { name: "Intel Core i9-13900K", price: 414, socket: "intel", watts: 253, tier: 3 }, 
+                { name: "AMD Ryzen 7 9800X3D", price: 441, socket: "amd", watts: 120, tier: 3 },
+                { name: "Intel Core i9-14900K", price: 468, socket: "intel", watts: 253, tier: 3 },
+                { name: "AMD Ryzen 9 7950X3D", price: 495, socket: "amd", watts: 120, tier: 3 }, 
+                { name: "AMD Ryzen 9 9950X", price: 540, socket: "amd", watts: 170, tier: 3 }, 
+                { name: "Intel Core i9-14900KS", price: 585, socket: "intel", watts: 320, tier: 3 }
+            ],
+            gpu: [
+                // --- CARTES D'ENTRÉE DE GAMME ---
+                { name: "AMD Radeon RX 6400", price: 98, watts: 55, tier: 1 }, 
+                { name: "NVIDIA GeForce RTX 2060", price: 152, watts: 160, tier: 1 },
+                { name: "AMD Radeon RX 6600", price: 170, watts: 132, tier: 1 }, 
+                { name: "NVIDIA GeForce RTX 3050", price: 176, watts: 130, tier: 1 },
+                { name: "NVIDIA GeForce RTX 2070 Super", price: 189, watts: 215, tier: 1 },
+                { name: "NVIDIA GeForce RTX 3060 12GB", price: 230, watts: 170, tier: 1 },
+                { name: "NVIDIA GeForce RTX 2080 Ti", price: 243, watts: 250, tier: 2 },
+                
+                // --- CARTES DE MILIEU DE GAMME ---
+                { name: "NVIDIA GeForce RTX 4060", price: 260, watts: 115, tier: 2 }, 
+                { name: "NVIDIA GeForce RTX 3060 Ti", price: 269, watts: 200, tier: 2 },
+                { name: "NVIDIA GeForce RTX 4060 Ti", price: 332, watts: 160, tier: 2 },
+                { name: "NVIDIA GeForce RTX 3070", price: 323, watts: 220, tier: 2 },
+                { name: "NVIDIA GeForce RTX 5060", price: 315, watts: 140, tier: 2 },
+                { name: "AMD Radeon RX 7800 XT", price: 440, watts: 263, tier: 2 },
+                { name: "NVIDIA GeForce RTX 3080 10GB", price: 422, watts: 320, tier: 2 },
+                { name: "NVIDIA RTX 4070 Super", price: 531, watts: 220, tier: 2 },
+                { name: "NVIDIA GeForce RTX 5070", price: 584, watts: 220, tier: 2 },
+                
+                // --- HAUT DE GAMME / PERFORMANCE EXTRÊME ---
+                { name: "NVIDIA GeForce RTX 3090", price: 558, watts: 350, tier: 3 },
+                { name: "AMD Radeon RX 7900 XT", price: 675, watts: 315, tier: 3 },
+                { name: "NVIDIA RTX 4070 Ti Super", price: 738, watts: 285, tier: 3 }, 
+                { name: "Sapphire Nitro+ RX 7900 XTX", price: 855, watts: 420, tier: 3 },
+                { name: "NVIDIA RTX 4080 Super FE", price: 927, watts: 320, tier: 3 }, 
+                { name: "MSI Gaming X Slim RTX 4080 Super", price: 963, watts: 320, tier: 3 },
+                { name: "NVIDIA GeForce RTX 5080", price: 1079, watts: 400, tier: 3 },
+                { name: "ASUS ROG Strix RTX 4080 Super", price: 1097, watts: 320, tier: 3 }, 
+                
+                // --- LES MONSTRES ULTRA HAUT DE GAMME ---
+                { name: "Gigabyte RTX 4090 Aero OC", price: 1646, watts: 450, tier: 3 },
+                { name: "Gigabyte AORUS RTX 4090 Master", price: 1674, watts: 450, tier: 3 }, 
+                { name: "MSI Suprim X RTX 4090", price: 1727, watts: 450, tier: 3 }, 
+                { name: "MSI RTX 4090 SUPRIM LIQUID", price: 1799, watts: 450, tier: 3 },
+                { name: "ASUS ROG Strix RTX 4090 OC", price: 1889, watts: 500, tier: 3 }, 
+                { name: "NVIDIA GeForce RTX 5090 Ultra", price: 2205, watts: 600, tier: 3 },
+                { name: "ASUS ROG Matrix RTX 4090 Platinum", price: 2699, watts: 550, tier: 3 }
+            ],
+            mobo: [
+                { name: "ASRock 970 Pro3 R2.0 (DDR3)", price: 58, socket: "amd", ramGen: "ddr3", era: "ancient" },
+                { name: "ASUS Prime B450M-A II (DDR4)", price: 62, socket: "amd", ramGen: "ddr4", era: "old" },
+                { name: "ASUS M5A97 R2.0 (DDR3)", price: 68, socket: "amd", ramGen: "ddr3", era: "ancient" },
+                { name: "Gigabyte GA-Z97-HD3 (DDR3)", price: 86, socket: "intel", ramGen: "ddr3", era: "ancient" },
+                { name: "Gigabyte B550 AORUS Elite V2 (DDR4)", price: 103, socket: "amd", ramGen: "ddr4", era: "old" },
+                { name: "MSI Z97 GAMING 5 (DDR3)", price: 108, socket: "intel", ramGen: "ddr3", era: "ancient" },
+                { name: "MSI MAG B560 Torpedo (DDR4)", price: 116, socket: "intel", ramGen: "ddr4", era: "old" },
+                { name: "ASUS ROG Strix B550-F Gaming (DDR4)", price: 134, socket: "amd", ramGen: "ddr4", era: "old" },
+                { name: "MSI MAG Z490 Tomahawk (DDR4)", price: 143, socket: "intel", ramGen: "ddr4", era: "old" },
+                { name: "ASUS Sabertooth Z97 Mark 1 (DDR3)", price: 153, socket: "intel", ramGen: "ddr3", era: "ancient" },
+                { name: "MSI MAG B650 Tomahawk WiFi (DDR5)", price: 170, socket: "amd", ramGen: "ddr5", era: "modern" },
+                { name: "ASUS TUF Gaming Z690-Plus D4 (DDR4)", price: 176, socket: "intel", ramGen: "ddr4", era: "old" },
+                { name: "Gigabyte B650 AORUS Elite AX (DDR5)", price: 185, socket: "amd", ramGen: "ddr5", era: "modern" },
+                { name: "ASUS TUF Gaming Z790-Plus (DDR5)", price: 212, socket: "intel", ramGen: "ddr5", era: "modern" },
+                { name: "ASUS Prime Z790-A WiFi (DDR5)", price: 233, socket: "intel", ramGen: "ddr5", era: "modern" },
+                { name: "Gigabyte Z790 AERO G (DDR5)", price: 305, socket: "intel", ramGen: "ddr5", era: "modern" },
+                { name: "ASUS ROG Strix X670E-E (DDR5)", price: 405, socket: "amd", ramGen: "ddr5", era: "modern" },
+                { name: "ASUS ROG Crosshair X670E Extreme (DDR5)", price: 851, socket: "amd", ramGen: "ddr5", era: "modern" }, 
+                { name: "ASUS ROG Maximus Z790 Extreme (DDR5)", price: 918, socket: "intel", ramGen: "ddr5", era: "modern" }, 
+                { name: "MSI MEG Z790 GODLIKE (DDR5)", price: 1079, socket: "intel", ramGen: "ddr5", era: "modern" }
+            ],
+            ram: [
+                { name: "8 Go DDR3 Kingston ValueRAM 1600MHz", price: 16, ramGen: "ddr3" },
+                { name: "16 Go DDR4 Corsair Vengeance LPX 3200MHz", price: 34, ramGen: "ddr4" },
+                { name: "16 Go DDR3 Corsair Vengeance Pro 1866MHz", price: 40, ramGen: "ddr3" },
+                { name: "16 Go DDR3 G.Skill Ripjaws X 2133MHz", price: 47, ramGen: "ddr3" },
+                { name: "32 Go DDR4 G.Skill Ripjaws V 3600MHz", price: 67, ramGen: "ddr4" },
+                { name: "32 Go DDR5 Crucial Pro 5600MHz", price: 162, ramGen: "ddr5" },
+                { name: "32 Go DDR3 Patriot Viper 3 1600MHz", price: 85, ramGen: "ddr3" },
+                { name: "32 Go DDR4 Corsair Vengeance RGB Pro 3600MHz", price: 89, ramGen: "ddr4" },
+                { name: "32 Go DDR5 Kingston Fury 6000MHz", price: 175, ramGen: "ddr5" },
+                { name: "32 Go DDR5 Corsair Vengeance 6400MHz", price: 189, ramGen: "ddr5" },
+                { name: "64 Go DDR4 Teamgroup T-Force Delta RGB", price: 149, ramGen: "ddr4" },
+                { name: "32 Go DDR5 G.Skill Trident Z5 7200MHz", price: 212, ramGen: "ddr5" },
+                { name: "64 Go DDR5 Kingston Fury Renegade 6400MHz", price: 381, ramGen: "ddr5" },
+                { name: "64 Go DDR5 Teamgroup T-Force Delta RGB", price: 405, ramGen: "ddr5" },
+                { name: "64 Go DDR4 G.Skill Trident Z Royal 4000MHz", price: 279, ramGen: "ddr4" },
+                { name: "32 Go DDR5 Corsair Dominator 8000MHz", price: 462, ramGen: "ddr5" }, 
+                { name: "64 Go DDR5 Corsair Dominator 7200MHz", price: 548, ramGen: "ddr5" },
+                { name: "64 Go DDR5 G.Skill Trident Z5 Royal 8000MHz", price: 759, ramGen: "ddr5" }, 
+                { name: "128 Go DDR5 G.Skill Trident Z5 RGB", price: 930, ramGen: "ddr5" },
+                { name: "128 Go DDR5 Corsair Dominator Titanium", price: 1045, ramGen: "ddr5" }
+            ],
+            cooler: [
+                { name: "Ventirad Intel Stock Cooler", price: 9 }, { name: "AMD Wraith Stealth", price: 12 },
+                { name: "Thermalright Assassin X 120 Refined", price: 19 }, { name: "Thermalright Peerless Assassin 120", price: 35 }, 
+                { name: "DeepCool AK620 Digital", price: 74 }, { name: "be quiet! Dark Rock Pro 5", price: 89 }, 
+                { name: "Arctic Liquid Freezer III 360", price: 88 }, { name: "Noctua NH-D15 chromax.black", price: 109 }, 
+                { name: "be quiet! Pure Loop 2 360mm", price: 115 }, { name: "Noctua NH-U12A chromax", price: 119 }, 
+                { name: "Arctic Liquid Freezer III 420 RGB", price: 124 }, { name: "DeepCool LT720 360mm", price: 135 }, 
+                { name: "Cooler Master MasterLiquid 360 Atmos", price: 159 }, { name: "NZXT Kraken 240 RGB", price: 169 }, 
+                { name: "ASUS ROG Strix LC III 360", price: 199 }, { name: "Corsair H100i iCUE LINK", price: 219 }, 
+                { name: "Thermaltake Toughliquid Ultra 360", price: 235 }, { name: "Phanteks Glacier One 360 T30", price: 245 }, 
+                { name: "Lian Li Galahad II LCD 360", price: 265 }, { name: "MSI MEG CoreLiquid S360", price: 279 }, 
+                { name: "NZXT Kraken Elite 360 RGB", price: 299 }, { name: "Corsair iCUE LINK H150i LCD", price: 345 }, 
+                { name: "ASUS ROG Ryujin III 360 ARGB (AIO)", price: 389 }
+            ],
+            storage: [
+                { name: "SSD 500 Go Kingston NV2 M.2", price: 38 }, { name: "SSD 1 To Crucial P3 NVMe", price: 65 },
+                { name: "SSD 1 To WD Black SN770", price: 79 }, { name: "SSD 1 To Samsung 990 PRO", price: 99 }, 
+                { name: "SSD 2 To Teamgroup Cardea Z440", price: 114 }, { name: "SSD 2 To Lexar NM790", price: 119 }, 
+                { name: "SSD 2 To Kingston KC3000", price: 129 }, { name: "SSD 2 To Crucial T500 M.2", price: 135 }, 
+                { name: "SSD 2 To WD Black SN850X", price: 145 }, { name: "SSD 2 To MSI Spatium M480", price: 155 }, 
+                { name: "SSD 2 To Samsung 990 PRO M.2", price: 169 }, { name: "SSD 4 To Crucial P3 Plus", price: 225 }, 
+                { name: "SSD 2 To Crucial T700 PCIe 5.0", price: 269 }, { name: "SSD 4 To WD Black SN850X M.2", price: 299 }, 
+                { name: "SSD 4 To Kingston FURY Renegade", price: 325 }, { name: "SSD 4 To Samsung 990 PRO M.2", price: 349 }, 
+                { name: "SSD 4 To SanDisk Extreme Pro M.2", price: 355 }, { name: "SSD 4 To Seagate FireCuda 530", price: 369 }, 
+                { name: "SSD 4 To Corsair MP700 PRO PCIe 5.0", price: 540 }, { name: "SSD 4 To Crucial T705 PCIe 5.0", price: 585 }, 
+                { name: "SSD 8 To Corsair MP600 Pro NH", price: 870 }, { name: "SSD 8 To Sabrent Rocket 4 Plus M.2", price: 999 }
+            ],
+            psu: [
+                { name: "Aerocool LUX 550W RGB", price: 39, supplyWatts: 550 }, { name: "Corsair CV650 650W Bronze", price: 58, supplyWatts: 650 },
+                { name: "be quiet! System Power 10 750W", price: 76, supplyWatts: 750 }, { name: "be quiet! Pure Power 12 M 850W", price: 119, supplyWatts: 850 }, 
+                { name: "Corsair RM850x 850W Gold", price: 125, supplyWatts: 850 }, { name: "Seasonic Focus GX-850 ATX 3.0", price: 135, supplyWatts: 850 }, 
+                { name: "Gigabyte UD1000GM PG5 1000W", price: 145, supplyWatts: 1000 }, { name: "MSI MAG A1000G PCIE5 1000W", price: 159, supplyWatts: 1000 }, 
+                { name: "Asus TUF Gaming 1000W Gold", price: 169, supplyWatts: 1000 }, { name: "Corsair RM1000x Shift ATX 3.0", price: 189, supplyWatts: 1000 }, 
+                { name: "be quiet! Straight Power 12 1200W", price: 215, supplyWatts: 1200 }, { name: "Seasonic Vertex GX-1200 ATX 3.0", price: 235, supplyWatts: 1200 }, 
+                { name: "ASUS ROG Loki SFX-L 1000W", price: 249, supplyWatts: 1000 }, { name: "EVGA SuperNOVA 1300 G2", price: 265, supplyWatts: 1300 }, 
+                { name: "Corsair HX1500i 1500W Platinum", price: 289, supplyWatts: 1500 }, { name: "MSI MEG Ai1300P 1300W Platinum", price: 315, supplyWatts: 1300 }, 
+                { name: "be quiet! Dark Power Pro 13 1600W", price: 399, supplyWatts: 1600 }, { name: "Thermaltake Toughpower 1650W", price: 495, supplyWatts: 1650 }, 
+                { name: "Seasonic Prime TX-1600 Titanium", price: 549, supplyWatts: 1600 }, { name: "Corsair AX1600i 1600W Titanium", price: 599, supplyWatts: 1600 }, 
+                { name: "ASUS ROG Thor 1600W Titanium", price: 649, supplyWatts: 1600 }, { name: "SilverStone HELA 2050W Platinum", price: 699, supplyWatts: 2050 }
+            ],
+            case: [
+                { name: "Zalman T7 Boîtier PC", price: 36, size: "small" },
+                { name: "Antec NX210 Moyen Tour", price: 49, size: "standard" },
+                { name: "Aerocool Cylon RGB", price: 52, size: "standard" },
+                { name: "Lian Li Lancool 216", price: 99, size: "standard" }, 
+                { name: "NZXT H7 Flow", price: 125, size: "standard" }, 
+                { name: "Lian Li Vision O11", price: 139, size: "standard" }, 
+                { name: "Antec Performance 1 FT", price: 145, size: "standard" }, 
+                { name: "Thermaltake Tower 500", price: 149, size: "standard" }, 
+                { name: "ASUS TUF Gaming GT502", price: 155, size: "standard" }, 
+                { name: "Fractal Design North XL", price: 175, size: "xl" }, 
+                { name: "be quiet! Shadow Base 800 FX", price: 179, size: "standard" }, 
+                { name: "Fractal Design Terra (Bois)", price: 185, size: "small" }, 
+                { name: "Corsair iCUE Link 6500X", price: 195, size: "standard" }, 
+                { name: "Fractal Design Torrent Mesh", price: 199, size: "standard" }, 
+                { name: "Phanteks NV7", price: 205, size: "standard" }, 
+                { name: "NZXT H9 Elite", price: 229, size: "standard" }, 
+                { name: "Lian Li O11 Dynamic EVO XL", price: 239, size: "xl" }, 
+                { name: "Phanteks NV9 Grand Boîtier", price: 259, size: "xl" }, 
+                { name: "be quiet! Dark Base Pro 901", price: 295, size: "xl" }, 
+                { name: "Hyte Y70 Touch (Écran)", price: 369, size: "standard" }, 
+                { name: "ROG Strix Hyperion GR701", price: 389, size: "xl" }, 
+                { name: "Cooler Master HAF 700 EVO", price: 455, size: "xl" }, 
+                { name: "Corsair Obsidian 1000D", price: 499, size: "xl" }
+            ],
+            fans: [
+                { name: "Ventilateur Arctic P12 Slim (120mm)", price: 7, fitSize: ["small", "standard", "xl"] },
+                { name: "Ventilateur Arctic P12 Max (120mm)", price: 9, fitSize: ["small", "standard", "xl"] }, 
+                { name: "Ventilateur SilverStone Air Blazer", price: 16, fitSize: ["standard", "xl"] }, 
+                { name: "Ventilateur be quiet! Light Wings 120", price: 21, fitSize: ["small", "standard", "xl"] }, 
+                { name: "Ventilateur Noctua NF-F12 chromax", price: 24, fitSize: ["small", "standard", "xl"] }, 
+                { name: "Ventilateur Noiseblocker NB-eLoop", price: 26, fitSize: ["standard", "xl"] }, 
+                { name: "Ventilateur Seasonic MagFlow 120", price: 26, fitSize: ["standard", "xl"] }, 
+                { name: "Ventilateur be quiet! Silent Wings 4 Pro", price: 28, fitSize: ["standard", "xl"] }, 
+                { name: "Ventilateur Phanteks T30-120", price: 29, fitSize: ["standard", "xl"] }, 
+                { name: "Ventilateur Noctua NF-A12x25 PWM", price: 31, fitSize: ["small", "standard", "xl"] }, 
+                { name: "Pack 5x Arctic P12 PWM Value Pack", price: 29, fitSize: ["standard", "xl"] }, 
+                { name: "Pack 3x Thermaltake Pure 12 ARGB", price: 39, fitSize: ["standard", "xl"] }, 
+                { name: "Pack 3x Antec Fusion 120 ARGB", price: 44, fitSize: ["standard", "xl"] }, 
+                { name: "Pack 3x Cooler Master MasterFan Halo", price: 58, fitSize: ["standard", "xl"] }, 
+                { name: "Pack 3x Phanteks D30-120 DRGB", price: 82, fitSize: ["standard", "xl"] }, 
+                { name: "Pack 3x Lian Li AL120 V2", price: 89, fitSize: ["standard", "xl"] }, 
+                { name: "Pack 3x Corsair LL120 RGB", price: 89, fitSize: ["standard", "xl"] }, 
+                { name: "Pack 3x Thermaltake SWAFAN EX12 RGB", price: 99, fitSize: ["standard", "xl"] }, 
+                { name: "Pack 3x NZXT F120 RGB Duo", price: 104, fitSize: ["standard", "xl"] }, 
+                { name: "Pack 3x Corsair iCUE Link QX120 RGB", price: 129, fitSize: ["standard", "xl"] }, 
+                { name: "Pack 3x Lian Li Uni Fan TL LCD 140 (Gros)", price: 139, fitSize: ["xl"] }
+            ]
+        };
+
+        const labels = {
+            cpu: "Processeur (CPU)", gpu: "Carte Graphique (GPU)", mobo: "Carte Mère",
+            ram: "Mémoire (RAM)", cooler: "Refroidissement (Ventirad/AIO)",
+            storage: "Stockage (SSD NVMe)", psu: "Alimentation (PSU)", case: "Boîtier PC",
+            fans: "Ventilateurs de Boîtier"
+        };
+
+        // Valeurs de performance par tier pour le bottleneck
+        const tierPerformance = {
+            1: 100,
+            2: 250,
+            3: 450
+        };
+
+        // Initialiser les IDs uniques pour les composants
+        function initializeDatasetWithIds() {
+            for (let type in dataset) {
+                dataset[type].forEach((item, index) => {
+                    item.id = `${type}_${index}`;
+                });
+            }
+        }
+
+        function startConfigurator() {
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('config-screen').classList.remove('hidden');
+            generateMenus();
+            loadConfiguration();
+        }
+
+        function showHome() {
+            document.getElementById('config-screen').classList.add('hidden');
+            document.getElementById('home-screen').classList.remove('hidden');
+        }
+
+        function generateMenus() {
+            const container = document.getElementById('components-container');
+            container.innerHTML = ''; 
+
+            for (let type in dataset) {
+                dataset[type].sort((a, b) => a.price - b.price);
+
+                let group = document.createElement('div');
+                group.className = 'component-group';
+
+                let labelWrapper = document.createElement('div');
+                labelWrapper.className = 'component-label-wrapper';
+
+                let label = document.createElement('label');
+                label.innerText = labels[type] + " :";
+                labelWrapper.appendChild(label);
+
+                let sourceLink = document.createElement('a');
+                sourceLink.id = `source-${type}`;
+                sourceLink.className = 'source-link hidden';
+                sourceLink.target = '_blank';
+                sourceLink.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i> Voir le site';
+                labelWrapper.appendChild(sourceLink);
+
+                let select = document.createElement('select');
+                select.id = type;
+                select.onchange = (e) => handleSelectionChange(type); 
+
+                let defaultOpt = document.createElement('option');
+                defaultOpt.value = "0";
+                defaultOpt.innerText = `-- Choisir : ${labels[type]} --`;
+                select.appendChild(defaultOpt);
+
+                dataset[type].forEach((item) => {
+                    let opt = document.createElement('option');
+                    opt.value = item.id;
+                    opt.innerText = `${item.name} (${item.price}€)`;
+                    opt.dataset.id = item.id;
+                    
+                    if (item.socket) opt.dataset.socket = item.socket;
+                    if (item.ramGen) opt.dataset.ramgen = item.ramGen;
+                    if (item.size) opt.dataset.size = item.size;
+                    if (item.fitSize) opt.dataset.fitsize = JSON.stringify(item.fitSize);
+                    if (item.watts) opt.dataset.watts = item.watts;
+                    if (item.supplyWatts) opt.dataset.supplywatts = item.supplyWatts;
+                    if (item.tier) opt.dataset.tier = item.tier;
+
+                    select.appendChild(opt);
+                });
+
+                group.appendChild(labelWrapper);
+                group.appendChild(select);
+
+                let warningDiv = document.createElement('div');
+                warningDiv.id = `warning-${type}`;
+                warningDiv.className = 'compatibility-warning hidden';
+                group.appendChild(warningDiv);
+
+                container.appendChild(group);
+            }
+        }
+
+        function handleSelectionChange(type) {
+            updateSourceLink(type);
+            checkCompatibility();
+            updateTotal();
+            saveConfiguration();
+        }
+
+        function updateSourceLink(type) {
+            const select = document.getElementById(type);
+            const sourceLink = document.getElementById(`source-${type}`);
+            
+            if (select.selectedIndex === 0) {
+                sourceLink.classList.add('hidden');
+            } else {
+                const selectedOption = select.options[select.selectedIndex];
+                const itemId = selectedOption.dataset.id;
+                const typeData = dataset[type];
+                const item = typeData.find(c => c.id === itemId);
+                
+                if (item) {
+                    sourceLink.href = `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(item.name)}`;
+                    sourceLink.classList.remove('hidden');
+                }
+            }
+        }
+
+        function getComponentFromId(type, id) {
+            return dataset[type].find(item => item.id === id);
+        }
+
+        function checkCompatibility() {
+            const cpuSelect = document.getElementById('cpu');
+            const gpuSelect = document.getElementById('gpu');
+            const moboSelect = document.getElementById('mobo');
+            const ramSelect = document.getElementById('ram');
+            const caseSelect = document.getElementById('case');
+            const fansSelect = document.getElementById('fans');
+            const psuSelect = document.getElementById('psu');
+            
+            if (!cpuSelect || !moboSelect || !ramSelect || !caseSelect || !fansSelect || !psuSelect || !gpuSelect) return;
+
+            const selectedCpuId = cpuSelect.value;
+            const selectedGpuId = gpuSelect.value;
+            const selectedCpuObj = selectedCpuId !== "0" ? getComponentFromId('cpu', selectedCpuId) : null;
+            const selectedGpuObj = selectedGpuId !== "0" ? getComponentFromId('gpu', selectedGpuId) : null;
+
+            const selectedCpuTier = selectedCpuObj?.tier || 0;
+            const selectedGpuTier = selectedGpuObj?.tier || 0;
+
+            // 1. Anti-bottleneck amélioré avec ratio de puissance
+            clearWarning('cpu');
+            clearWarning('gpu');
+
+            if (selectedCpuTier > 0 && selectedGpuTier > 0) {
+                const cpuPerf = tierPerformance[selectedCpuTier];
+                const gpuPerf = tierPerformance[selectedGpuTier];
+                const ratio = cpuPerf / gpuPerf;
+
+                if (ratio < 0.35) {
+                    showWarning('cpu', `⚠️ CPU faible pour ce GPU (risque bottleneck)`);
+                } else if (ratio > 2.5) {
+                    showWarning('gpu', `⚠️ GPU faible pour ce CPU (risque bottleneck)`);
+                }
+            }
+
+            // Désactiver options incompatibles CPU
+            for (let i = 0; i < cpuSelect.options.length; i++) {
+                let option = cpuSelect.options[i];
+                if (option.value === "0") continue;
+                let cpuTier = Number(option.dataset.tier);
+                if (selectedGpuTier > 0) {
+                    const cpuPerf = tierPerformance[cpuTier] || 0;
+                    const gpuPerf = tierPerformance[selectedGpuTier] || 0;
+                    const ratio = cpuPerf / gpuPerf;
+                    if (ratio < 0.3 || ratio > 3) {
+                        setOptionDisabled(option, cpuSelect, i);
+                    } else {
+                        setOptionEnabled(option);
+                    }
+                } else {
+                    setOptionEnabled(option);
+                }
+            }
+
+            // Désactiver options incompatibles GPU
+            for (let i = 0; i < gpuSelect.options.length; i++) {
+                let option = gpuSelect.options[i];
+                if (option.value === "0") continue;
+                let gpuTier = Number(option.dataset.tier);
+                if (selectedCpuTier > 0) {
+                    const cpuPerf = tierPerformance[selectedCpuTier] || 0;
+                    const gpuPerf = tierPerformance[gpuTier] || 0;
+                    const ratio = cpuPerf / gpuPerf;
+                    if (ratio < 0.3 || ratio > 3) {
+                        setOptionDisabled(option, gpuSelect, i);
+                    } else {
+                        setOptionEnabled(option);
+                    }
+                } else {
+                    setOptionEnabled(option);
+                }
+            }
+
+            // 1.5. NOUVELLE RÈGLE: GPU tier 3 incompatible avec DDR3
+            const selectedMoboId = moboSelect.value;
+            const selectedMoboObj = selectedMoboId !== "0" ? getComponentFromId('mobo', selectedMoboId) : null;
+            if (selectedGpuTier === 3 && selectedMoboObj && selectedMoboObj.ramGen === 'ddr3') {
+                showWarning('mobo', `❌ GPU haut de gamme nécessite DDR4 minimum !`);
+            }
+
+            // Désactiver GPU tier 3 si carte mère DDR3 sélectionnée
+            for (let i = 0; i < gpuSelect.options.length; i++) {
+                let option = gpuSelect.options[i];
+                if (option.value === "0") continue;
+                let gpuTier = Number(option.dataset.tier);
+                if (gpuTier === 3 && selectedMoboObj && selectedMoboObj.ramGen === 'ddr3') {
+                    setOptionDisabled(option, gpuSelect, i);
+                }
+            }
+
+            // 2. Sockets
+            clearWarning('mobo');
+            const cpuSocket = cpuSelect.options[cpuSelect.selectedIndex].dataset.socket;
+            if (cpuSocket) {
+                for (let i = 0; i < moboSelect.options.length; i++) {
+                    let option = moboSelect.options[i];
+                    if (option.value === "0") continue;
+                    if (option.dataset.socket && cpuSocket !== option.dataset.socket) {
+                        setOptionDisabled(option, moboSelect, i);
+                    } else {
+                        setOptionEnabled(option);
+                    }
+                }
+            }
+
+            // 3. RAM
+            clearWarning('ram');
+            const moboRamGen = moboSelect.options[moboSelect.selectedIndex].dataset.ramgen;
+            if (moboRamGen) {
+                for (let j = 0; j < ramSelect.options.length; j++) {
+                    let option = ramSelect.options[j];
+                    if (option.value === "0") continue;
+                    if (option.dataset.ramgen && moboRamGen !== option.dataset.ramgen) {
+                        setOptionDisabled(option, ramSelect, j);
+                    } else {
+                        setOptionEnabled(option);
+                    }
+                }
+            }
+
+            // 4. Boîtier & Ventilateurs
+            clearWarning('fans');
+            const caseSize = caseSelect.options[caseSelect.selectedIndex].dataset.size;
+            if (caseSize) {
+                for (let k = 0; k < fansSelect.options.length; k++) {
+                    let option = fansSelect.options[k];
+                    if (option.value === "0") continue;
+                    if (option.dataset.fitsize) {
+                        const allowedSizes = JSON.parse(option.dataset.fitsize);
+                        if (!allowedSizes.includes(caseSize)) {
+                            setOptionDisabled(option, fansSelect, k); 
+                        } else {
+                            setOptionEnabled(option);
+                        }
+                    }
+                }
+            }
+
+            // 5. PSU Power
+            clearWarning('psu');
+            let requiredWatts = 50; 
+            const selectedCpuWatts = Number(cpuSelect.options[cpuSelect.selectedIndex].dataset.watts) || 0;
+            const selectedGpuWatts = Number(gpuSelect.options[gpuSelect.selectedIndex].dataset.watts) || 0;
+            requiredWatts += selectedCpuWatts + selectedGpuWatts;
+
+            if (requiredWatts > 50) {
+                for (let m = 0; m < psuSelect.options.length; m++) {
+                    let option = psuSelect.options[m];
+                    if (option.value === "0") continue;
+                    const psuPower = Number(option.dataset.supplywatts) || 0;
+                    if (psuPower < (requiredWatts + 100)) {
+                        setOptionDisabled(option, psuSelect, m);
+                    } else {
+                        setOptionEnabled(option);
+                    }
+                }
+                if (requiredWatts > 50) {
+                    showWarning('psu', `⚡ Puissance requise: ${requiredWatts}W (+ 100W marge)`);
+                }
+            }
+        }
+
+        function showWarning(type, message) {
+            const warningDiv = document.getElementById(`warning-${type}`);
+            if (warningDiv) {
+                warningDiv.innerText = message;
+                warningDiv.classList.remove('hidden');
+            }
+        }
+
+        function clearWarning(type) {
+            const warningDiv = document.getElementById(`warning-${type}`);
+            if (warningDiv) {
+                warningDiv.classList.add('hidden');
+            }
+        }
+
+        function setOptionDisabled(option, selectElement, index) {
+            option.disabled = true;
+            option.style.textDecoration = "line-through";
+            option.style.color = "#ff4a4a"; 
+            if (selectElement.selectedIndex === index) {
+                selectElement.selectedIndex = 0;
+                updateSourceLink(selectElement.id);
+            }
+        }
+
+        function setOptionEnabled(option) {
+            option.disabled = false;
+            option.style.textDecoration = "none";
+            option.style.color = "";
+        }
+
+        function updateTotal() {
+            let total = 0;
+            for (let type in dataset) {
+                const element = document.getElementById(type);
+                const itemId = element?.value;
+                if (itemId && itemId !== "0") {
+                    const item = getComponentFromId(type, itemId);
+                    if (item) {
+                        total += item.price;
+                    }
+                }
+            }
+            
+            const totalPriceElement = document.getElementById('total-price');
+            if (totalPriceElement) {
+                totalPriceElement.innerText = total.toLocaleString('fr-FR');
+            }
+
+            const maxBudgetInput = document.getElementById('max-budget');
+            const maxBudget = Number(maxBudgetInput?.value || 0);
+            const budgetStatus = document.getElementById('budget-status');
+
+            if (maxBudget > 0 && total > maxBudget) {
+                totalPriceElement.style.color = "#ff4a4a"; 
+                totalPriceElement.style.fontWeight = "bold";
+                budgetStatus.classList.add('over');
+                budgetStatus.innerText = `⚠️ Dépassement: +${(total - maxBudget).toLocaleString('fr-FR')}€`;
+                budgetStatus.style.display = "block";
+            } else if (totalPriceElement) {
+                totalPriceElement.style.color = "";
+                totalPriceElement.style.fontWeight = "";
+                if (maxBudget > 0) {
+                    budgetStatus.classList.remove('over');
+                    budgetStatus.innerText = `✓ Budget OK: ${(maxBudget - total).toLocaleString('fr-FR')}€ restant`;
+                    budgetStatus.style.display = "block";
+                } else {
+                    budgetStatus.style.display = "none";
+                }
+            }
+        }
+
+        function generateSummary() {
+            const resultsContainer = document.getElementById('summary-results');
+            resultsContainer.innerHTML = ''; 
+
+            let total = 0;
+            let missingComponents = false;
+            let configArray = [];
+
+            for (let type in dataset) {
+                const select = document.getElementById(type);
+                const selectedId = select.value;
+
+                if (selectedId === "0") {
+                    missingComponents = true;
+                    continue;
+                }
+
+                const componentObj = getComponentFromId(type, selectedId);
+                if (!componentObj) continue;
+
+                total += componentObj.price;
+                configArray.push({ type, component: componentObj });
+
+                const itemRow = document.createElement('div');
+                itemRow.className = 'summary-item-row';
+                const itemLink = `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(componentObj.name)}`;
+
+                itemRow.innerHTML = `
+                    <strong>${labels[type]} :</strong> 
+                    <a href="${itemLink}" target="_blank" class="component-link">${componentObj.name}</a> 
+                    <span class="component-price">— ${componentObj.price}€</span>
+                `;
+                resultsContainer.appendChild(itemRow);
+            }
+
+            if (resultsContainer.children.length === 0) {
+                resultsContainer.innerHTML = "<p style='color: var(--text-muted);'>Tu n'as sélectionné aucun composant.</p>";
+            } else {
+                const totalRow = document.createElement('div');
+                totalRow.className = 'summary-total-row';
+                totalRow.innerHTML = `<h3>Prix Total Final : ${total.toLocaleString('fr-FR')} €</h3>`;
+                if (missingComponents) {
+                    totalRow.innerHTML += `<p class='warning-incomplete'>⚠️ Attention : Ta configuration n'est pas complète !</p>`;
+                }
+                resultsContainer.appendChild(totalRow);
+            }
+
+            document.getElementById('summary-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('summary-modal').classList.add('hidden');
+        }
+
+        function saveConfiguration() {
+            try {
+                const config = {
+                    timestamp: new Date().getTime(),
+                    maxBudget: document.getElementById('max-budget').value,
+                    selections: {}
+                };
+                
+                for (let type in dataset) {
+                    const element = document.getElementById(type);
+                    config.selections[type] = element?.value || "0";
+                }
+                
+                localStorage.setItem('configTechSave', JSON.stringify(config));
+            } catch (e) {
+                console.error('Erreur sauvegarde localStorage:', e);
+            }
+        }
+
+        function loadConfiguration() {
+            try {
+                const saved = localStorage.getItem('configTechSave');
+                if (saved) {
+                    const config = JSON.parse(saved);
+                    
+                    if (config.maxBudget) {
+                        document.getElementById('max-budget').value = config.maxBudget;
+                    }
+                    
+                    if (config.selections) {
+                        for (let type in config.selections) {
+                            const element = document.getElementById(type);
+                            if (element) {
+                                element.value = config.selections[type];
+                            }
+                        }
+                    }
+                    
+                    checkCompatibility();
+                    updateTotal();
+                }
+            } catch (e) {
+                console.error('Erreur chargement localStorage:', e);
+            }
+        }
+
+        function resetConfiguration() {
+            if (confirm('Es-tu sûr ? Cette action ne peut pas être annulée.')) {
+                for (let type in dataset) {
+                    const element = document.getElementById(type);
+                    if (element) {
+                        element.selectedIndex = 0;
+                    }
+                }
+                document.getElementById('max-budget').value = 1500;
+                localStorage.removeItem('configTechSave');
+                checkCompatibility();
+                updateTotal();
+                showToast('Configuration réinitialisée', 'success');
+            }
+        }
+
+        function shareConfiguration() {
+            const params = new URLSearchParams();
+            params.set('budget', document.getElementById('max-budget').value);
+            
+            for (let type in dataset) {
+                const element = document.getElementById(type);
+                if (element.value !== "0") {
+                    params.set(type, element.value);
+                }
+            }
+            
+            const url = `${window.location.href}${window.location.href.includes('?') ? '&' : '?'}${params.toString()}`;
+            
+            try {
+                navigator.clipboard.writeText(url);
+                showToast('Lien copié dans le presse-papiers !', 'success');
+            } catch (e) {
+                console.error('Erreur copie URL:', e);
+                showToast('Erreur lors de la copie', 'error');
+            }
+        }
+
+        function copyConfigToClipboard() {
+            const text = document.getElementById('summary-results').innerText;
+            try {
+                navigator.clipboard.writeText(text);
+                showToast('Configuration copiée !', 'success');
+            } catch (e) {
+                console.error('Erreur copie:', e);
+                showToast('Erreur lors de la copie', 'error');
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        function loadFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const budget = params.get('budget');
+            
+            if (budget) {
+                document.getElementById('max-budget').value = budget;
+            }
+            
+            for (let type in dataset) {
+                const id = params.get(type);
+                if (id) {
+                    const element = document.getElementById(type);
+                    if (element) {
+                        element.value = id;
+                    }
+                }
+            }
+            
+            checkCompatibility();
+            updateTotal();
+        }
+
+        // Initialisation au chargement
+        window.addEventListener('load', () => {
+            initializeDatasetWithIds();
+        });
+    </script>
+</body>
+</html>
